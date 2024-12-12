@@ -1,4 +1,4 @@
-# Advent of Code 2023
+# Advent of Code 2024
 
 This repository contains my entries for the Advent of Code 2024 daily coding challenge at https://adventofcode.com/2024
 
