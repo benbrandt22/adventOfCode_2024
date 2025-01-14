@@ -21,36 +21,14 @@ public class MullItOver : BaseDayModule
 
     public long ExecutePart1(string data)
     {
-        var instructions = LoadMulInstructions(data);
+        var instructions = LoadInstructions(data);
         
-        var solution = instructions.Sum(x => x.Product);
+        var solution = instructions
+            .Where(x => x.Operation == Operation.Mul)
+            .Sum(x => x.Result());
+        
         WriteLine($"Solution: {solution}");
         return solution;
-    }
-    
-    private class Mul
-    {
-        public long Factor1 { get; }
-        public long Factor2 { get; }
-
-        public Mul(long factor1, long factor2)
-        {
-            Factor1 = factor1;
-            Factor2 = factor2;
-        }
-        
-        public long Product => Factor1 * Factor2;
-    }
-    
-    private List<Mul> LoadMulInstructions(string inputData)
-    {
-        var multiplicationInstructionRegex = new Regex(@"mul\((?<factor1>\d+),(?<factor2>\d+)\)");
-        var data = multiplicationInstructionRegex
-            .Matches(inputData)
-            .MapEachTo<Mul>()
-            .ToList();
-        WriteLine($"Loaded data with {data.Count} multiplication instructions.");
-        return data;
     }
     
     private class Instruction
@@ -88,7 +66,6 @@ public class MullItOver : BaseDayModule
     private List<Instruction> LoadInstructions(string inputData)
     {
         var instructionRegex = new Regex(@"(?<operation>mul|don't|do)\(((?<param1>\d+),(?<param2>\d+))?\)");
-        var test = instructionRegex.Matches(inputData).ToList();
         var data = instructionRegex
             .Matches(inputData)
             .MapEachTo<Instruction>()
