@@ -33,9 +33,9 @@ public static class StringExtensions
     /// <summary>
     /// Converts a string to a 2D char array, where each line is a row and each character is a column.
     /// </summary>
-    public static char[,] ToGrid(this string input)
+    public static char[,] ToGrid(this string input, bool removeEmptyLines = false)
     {
-        var lines = input.ToLines();
+        var lines = input.ToLines(removeEmptyLines);
         var grid = new char[lines.Count, lines[0].Length];
         for (var row = 0; row < lines.Count; row++)
         {
