@@ -15,8 +15,8 @@ public class PrintQueue : BaseDayModule
     [Fact] public void Part1_Sample() => ExecutePart1(GetData(InputType.Sample)).Should().Be(143);
     [Fact] public void Part1() => ExecutePart1(GetData(InputType.Input));
 
-    [Fact(Skip = "Not yet implemented")] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(123);
-    [Fact(Skip = "Not yet implemented")] public void Part2() => ExecutePart2(GetData(InputType.Input));
+    [Fact] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(123);
+    [Fact] public void Part2() => ExecutePart2(GetData(InputType.Input));
 
     private record PageOrderingRule(int Before, int After);
 
@@ -96,11 +96,53 @@ public class PrintQueue : BaseDayModule
     {
         var printJob = LoadPrintJob(data);
         
-        // TODO: complete part 2
+        var incorrectlyOrderedUpdates = printJob.Updates
+            .Where(update => !UpdateFollowsRules(update, printJob.PageOrderingRules))
+            .ToList();
+        WriteLine($"Found {incorrectlyOrderedUpdates.Count} incorrectly ordered updates.");
 
-        var solution = 0;
+        var fixedUpdates = incorrectlyOrderedUpdates
+            .Select(x => SortUpdate(x, printJob.PageOrderingRules))
+            .ToList();
+
+        var sumOfMiddlePageNumbers = fixedUpdates
+            .Select(GetMiddlePageNumber)
+            .Sum();
+
+        var solution = sumOfMiddlePageNumbers;
         WriteLine($"Solution: {solution}");
         return solution;
+    }
+
+    private Update SortUpdate(Update badUpdate, List<PageOrderingRule> pageOrderingRules)
+    {
+        var values = new List<int>(badUpdate.PageNumbers);
+        var comparer = new RulesComparer(pageOrderingRules);
+        values.Sort(comparer);
+        return new Update(values);
+    }
+
+    private class RulesComparer : IComparer<int>
+    {
+        private readonly List<PageOrderingRule> _rules;
+
+        public RulesComparer(List<PageOrderingRule> rules)
+        {
+            _rules = rules;
+        }
+
+        public int Compare(int x, int y)
+        {
+            var rule = _rules.SingleOrDefault(r => r.Before == x && r.After == y);
+            if (rule != null)
+            {
+                return -1;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 
 }
