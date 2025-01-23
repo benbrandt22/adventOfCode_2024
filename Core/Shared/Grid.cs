@@ -43,17 +43,23 @@ public record GridCoordinate(int Row, int Column)
     }
 }
 
-public record GridDirection(int DRow, int DCol)
+public record GridDirection(int DRow, int DCol, GridDirection.DirectionName Name)
 {
-    public static readonly GridDirection Up = new(-1, 0);
-    public static readonly GridDirection Down = new(1, 0);
-    public static readonly GridDirection Left = new(0, -1);
-    public static readonly GridDirection Right = new(0, 1);
-    public static readonly GridDirection UpLeft = new(-1, -1);
-    public static readonly GridDirection UpRight = new(-1, 1);
-    public static readonly GridDirection DownLeft = new(1, -1);
-    public static readonly GridDirection DownRight = new(1, 1);
+    public static readonly GridDirection Up = new(-1, 0, DirectionName.Up);
+    public static readonly GridDirection Down = new(1, 0, DirectionName.Down);
+    public static readonly GridDirection Left = new(0, -1, DirectionName.Left);
+    public static readonly GridDirection Right = new(0, 1, DirectionName.Right);
+    public static readonly GridDirection UpLeft = new(-1, -1, DirectionName.UpLeft);
+    public static readonly GridDirection UpRight = new(-1, 1, DirectionName.UpRight);
+    public static readonly GridDirection DownLeft = new(1, -1, DirectionName.DownLeft);
+    public static readonly GridDirection DownRight = new(1, 1, DirectionName.DownRight);
 
     public static readonly IReadOnlyList<GridDirection> AllDirections = new[]
         { Up, Down, Left, Right, UpLeft, UpRight, DownLeft, DownRight };
+    
+    public enum DirectionName
+    {
+        Up, Down, Left, Right,
+        UpLeft, UpRight, DownLeft, DownRight
+    }
 }
