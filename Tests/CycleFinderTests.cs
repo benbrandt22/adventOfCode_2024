@@ -35,23 +35,6 @@ public class CycleFinderTests(ITestOutputHelper outputHelper)
         act.Should().Throw<InvalidOperationException>().Where(e => e.Message.Contains(maxIterations.ToString()));
     }
     
-    [Fact]
-    public void CycleFinder_uses_equality_predicate_to_identify_value_match()
-    {
-        var inputCycle = new List<Person>
-        {
-            new("Ben"), new("Beth"), new("Ben"), new("Beth")
-        };
-        var cycleAnalysis = CycleFinder.FindCycle(inputCycle, (p1, p2) => p1.Name.Equals(p2.Name));
-        cycleAnalysis.CycleStartIndex.Should().Be(0);
-        cycleAnalysis.CycleLength.Should().Be(2);
-    }
-
-    private class Person(string name)
-    {
-        public string Name { get; } = name;
-    }
-    
     [Theory]
     // Extrapolate to indexes past the end of the supplied data
     [InlineData(new[] { 1, 2, 3, 1, 2, 3 }, 8, 3)]

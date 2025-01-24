@@ -8,17 +8,8 @@ public static class CycleFinder
     public static CycleAnalysis<T> FindCycle<T>(IEnumerable<T> inputCycle, long maxIterations = long.MaxValue)
         where T : IEquatable<T>
     {
-        return FindCycle(inputCycle, (a, b) => a.Equals(b), maxIterations);
-    }
-
-    /// <summary>
-    /// Finds the repeating cycle in the input sequence, if any. Assumes logic is deterministic and produces a repeating cycle.
-    /// </summary>
-    public static CycleAnalysis<T> FindCycle<T>(IEnumerable<T> inputCycle,
-        Func<T, T, bool> equalityPredicate,
-        long maxIterations = long.MaxValue)
-    {
-        var valuesSeen = new List<T>();
+        var valuesSeenInOrder = new List<T>();
+        var valuesSeenSet = new HashSet<T>(); // faster for lookup to see if we've seen a value before
 
         using var inputEnumerator = inputCycle.GetEnumerator();
         
@@ -27,16 +18,18 @@ public static class CycleFinder
             inputEnumerator.MoveNext();
             var current = inputEnumerator.Current;
 
-            var seenAtIndex = valuesSeen.FindIndex(x => equalityPredicate(x, current));
+            var seenBefore = valuesSeenSet.Contains(current);
             
-            if (seenAtIndex > -1)
+            if (seenBefore)
             {
+                var seenAtIndex = valuesSeenInOrder.IndexOf(current);
                 var cycleStartIndex = seenAtIndex;
                 var cycleLength = (i - seenAtIndex);
-                return new CycleAnalysis<T>(cycleStartIndex, cycleLength, valuesSeen);
+                return new CycleAnalysis<T>(cycleStartIndex, cycleLength, valuesSeenInOrder);
             }
 
-            valuesSeen.Add(current);
+            valuesSeenInOrder.Add(current);
+            valuesSeenSet.Add(current);
         }
 
         throw new InvalidOperationException(

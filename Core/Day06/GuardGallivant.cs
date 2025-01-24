@@ -15,7 +15,6 @@ public class GuardGallivant : BaseDayModule
     [Fact] public void Part1() => ExecutePart1(GetData(InputType.Input));
 
     [Fact] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(6);
-    // This is slow (~35min) but it works, I'm sure there is something to be learned here
     [Fact] public void Part2() => ExecutePart2(GetData(InputType.Input));
 
     private (Grid<char> Grid, GridCoordinate StartCoordinate, GridDirection StartDirection) LoadMap(string inputText)
