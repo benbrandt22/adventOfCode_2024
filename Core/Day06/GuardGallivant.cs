@@ -14,13 +14,14 @@ public class GuardGallivant : BaseDayModule
     [Fact] public void Part1_Sample() => ExecutePart1(GetData(InputType.Sample)).Should().Be(41);
     [Fact] public void Part1() => ExecutePart1(GetData(InputType.Input));
 
-    [Fact(Skip = "Not yet implemented")][ShowDebug] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(-1);
-    [Fact(Skip = "Not yet implemented")] public void Part2() => ExecutePart2(GetData(InputType.Input));
+    [Fact] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(6);
+    // This is slow (~35min) but it works, I'm sure there is something to be learned here
+    [Fact] public void Part2() => ExecutePart2(GetData(InputType.Input));
 
     private (Grid<char> Grid, GridCoordinate StartCoordinate, GridDirection StartDirection) LoadMap(string inputText)
     {
         var grid = new Grid<char>(inputText.ToGrid(removeEmptyLines: true));
-        WriteLine($"Loaded map grid of {grid.RowCount} rows and {grid.ColumnCount} columns");
+        Debug($"Loaded map grid of {grid.RowCount} rows and {grid.ColumnCount} columns");
         
         // find the guard starting position & direction
         var guards = new Dictionary<char, GridDirection>()
@@ -39,7 +40,7 @@ public class GuardGallivant : BaseDayModule
                 var startCoordinate = coordinate;
                 var startDirection = guards[valueHere];
                 
-                WriteLine($"Guard starting at ({startCoordinate.Row}, {startCoordinate.Column}) facing {startDirection.Name}");
+                Debug($"Guard starting at ({startCoordinate.Row}, {startCoordinate.Column}) facing {startDirection.Name}");
                 
                 return (grid, startCoordinate, startDirection);
             }
@@ -50,16 +51,15 @@ public class GuardGallivant : BaseDayModule
     
     public long ExecutePart1(string data)
     {
-        var solution = GetVisitedPositions(data).Distinct().Count();
+        var (grid, loc, dir) = LoadMap(data);
+        var solution = GetPath(grid, loc, dir).Select(x => x.Loc).Distinct().Count();
         WriteLine($"Visited Cells: {solution}");
         return solution;
     }
 
-    private IEnumerable<GridCoordinate> GetVisitedPositions(string data)
+    private IEnumerable<(GridCoordinate Loc, GridDirection Dir)> GetPath(Grid<char> grid, GridCoordinate loc, GridDirection dir)
     {
-        var (grid, loc, dir) = LoadMap(data);
-
-        yield return loc;
+        yield return (loc, dir);
 
         bool IsLeaving()
         {
@@ -92,19 +92,46 @@ public class GuardGallivant : BaseDayModule
             {
                 // move forward
                 loc = loc.Move(dir);
-                yield return loc;
+                yield return (loc, dir);
             }
         }
     }
     
     public long ExecutePart2(string data)
     {
-        WriteLine($"Part 2 - Loaded Data");
+        var loopingMapCount = 0;
 
-        var solution = 0;
-        WriteLine($"Solution: {solution}");
-        return solution;
+        // find the solution path of the original map to determine possible points of obstruction
+        var (originalGrid, startLoc, startDir) = LoadMap(data);
+        var possibleObstructionLocations = GetPath(originalGrid, startLoc, startDir)
+            .Skip(1) // not the starting position
+            .Select(x => x.Loc) // just the positions
+            .Distinct() // no dupes
+            .ToList();
+        
+        foreach (var openPosition in possibleObstructionLocations)
+        {
+            var (grid, loc, dir) = LoadMap(data);
+            grid[openPosition] = '#'; // place the obstruction
+            
+            try
+            {
+                var cycle = CycleFinder.FindCycle(GetPath(grid, loc, dir));
+                // (for some reason the cycle finder has been finding cycles of length 1, not going to dig into it now)
+                if (cycle.CycleLength > 1)
+                {
+                    WriteLine($"Found cycle of length {cycle.CycleLength}");
+                    loopingMapCount++;                    
+                }
+            }
+            catch (InvalidOperationException e)
+            {
+                // cycle not found
+            }
+        }
+
+        WriteLine($"Possible Looping-Path Maps: {loopingMapCount}");
+        return loopingMapCount;
     }
 
 }
-

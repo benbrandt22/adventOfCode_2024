@@ -16,6 +16,18 @@ public class Grid<T>
     public int ColumnCount => _array.GetLength(1);
     
     public T ValueAt(GridCoordinate coordinate) => _array[coordinate.Row, coordinate.Column];
+    
+    public T this[int row, int column]
+    {
+        get => _array[row, column];
+        set => _array[row, column] = value;
+    }
+    
+    public T this[GridCoordinate coordinate]
+    {
+        get => _array[coordinate.Row, coordinate.Column];
+        set => _array[coordinate.Row, coordinate.Column] = value;
+    }
 
     public IEnumerable<GridCoordinate> AllCoordinates()
     {
