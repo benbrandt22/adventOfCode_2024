@@ -1,0 +1,1 @@
+﻿dotnet new bb.aoc.day --DayNumber 9 --Name "Ben Test"

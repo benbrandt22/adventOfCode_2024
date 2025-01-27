@@ -1,0 +1,63 @@
+﻿{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Ben Brandt",
+  "classifications": [ "C#" ],
+  "name": "Advent of Code Daily Challenge Template",
+  "identity": "BenBrandt.AdventOfCode.Day",
+  "shortName": "bb.aoc.day",
+  "tags": {
+    "language": "C#",
+    "type": "item"
+  },
+  
+  "symbols": {
+    "DayNumber": {
+      "type": "parameter",
+      "datatype": "int",
+      "description": "Day number",
+      "defaultValue": "1"
+    },
+    "DayNumberPadded": {
+      "type": "derived",
+      "valueSource": "DayNumber",
+      "valueTransform": "minimumTwoDigitNumber"
+    },
+    "Name": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The name of the challenge (can contain spaces).",
+      "defaultValue": "Test Code"
+    },
+    "NamePascalCase": {
+      "type": "derived",
+      "valueSource": "Name",
+      "valueTransform": "noSpaces"
+    }
+  },
+
+  "forms": {
+    "noSpaces": {
+      "identifier": "replace",
+      "pattern": " ",
+      "replacement": ""
+    },
+    "minimumTwoDigitNumber": {
+      "identifier": "replace",
+      "pattern": "^([0-9])$",
+      "replacement": "0$1"
+    }
+  },
+
+  "sources": [
+    {
+      "source": "./",
+      "target": "./",
+      "include": [
+        "**"
+      ],
+      "rename": {
+        "{{NamePascalCase}}.cs.txt": "{{NamePascalCase}}.cs"
+      }
+    }
+  ]
+}

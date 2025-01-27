@@ -3,19 +3,20 @@ using Core.Shared;
 using Core.Shared.Extensions;
 using Core.Shared.Modules;
 
-namespace Core.DayXX;
+namespace Core.Day{{DayNumberPadded}};
 
-public class DayXPuzzleTemplate : BaseDayModule
+public class {{NamePascalCase}} : BaseDayModule
 {
-    public DayXPuzzleTemplate(ITestOutputHelper outputHelper) : base(outputHelper) { }
+    public {{NamePascalCase}}(ITestOutputHelper outputHelper) : base(outputHelper) { }
     
-    public override int Day => 0;
-    public override string Title => "TITLE";
+    public override int Day => {{DayNumber}};
 
-    [Fact(Skip = "Not yet implemented")][ShowDebug] public void Part1_Sample() => ExecutePart1(GetData(InputType.Sample)).Should().Be(-1);
+    public override string Title => "{{Name}}";
+
+    [Fact(Skip = "Not yet implemented")] public void Part1_Sample() => ExecutePart1(GetData(InputType.Sample)).Should().Be(-1);
     [Fact(Skip = "Not yet implemented")] public void Part1() => ExecutePart1(GetData(InputType.Input));
 
-    [Fact(Skip = "Not yet implemented")][ShowDebug] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(-1);
+    [Fact(Skip = "Not yet implemented")] public void Part2_Sample() => ExecutePart2(GetData(InputType.Sample)).Should().Be(-1);
     [Fact(Skip = "Not yet implemented")] public void Part2() => ExecutePart2(GetData(InputType.Input));
 
     public long ExecutePart1(string data)

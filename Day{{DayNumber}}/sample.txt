@@ -1,0 +1,1 @@
+Day {{DayNumber}} Sample Input
