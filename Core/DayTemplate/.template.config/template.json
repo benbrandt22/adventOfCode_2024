@@ -15,23 +15,27 @@
       "type": "parameter",
       "datatype": "int",
       "description": "Day number",
-      "defaultValue": "1"
+      "isRequired": true,
+      "replaces": "{{DayNumber}}"
     },
     "DayNumberPadded": {
       "type": "derived",
       "valueSource": "DayNumber",
-      "valueTransform": "minimumTwoDigitNumber"
+      "valueTransform": "minimumTwoDigitNumber",
+      "replaces": "{{DayNumberPadded}}"
     },
     "Name": {
       "type": "parameter",
       "datatype": "string",
       "description": "The name of the challenge (can contain spaces).",
-      "defaultValue": "Test Code"
+      "isRequired": true,
+      "replaces": "{{Name}}"
     },
     "NamePascalCase": {
       "type": "derived",
       "valueSource": "Name",
-      "valueTransform": "noSpaces"
+      "valueTransform": "noSpaces",
+      "replaces": "{{NamePascalCase}}"
     }
   },
 
