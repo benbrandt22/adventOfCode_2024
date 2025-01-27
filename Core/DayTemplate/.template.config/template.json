@@ -16,13 +16,15 @@
       "datatype": "int",
       "description": "Day number",
       "isRequired": true,
-      "replaces": "{{DayNumber}}"
+      "replaces": "{{DayNumber}}",
+      "fileRename": "{{DayNumber}}"
     },
     "DayNumberPadded": {
       "type": "derived",
       "valueSource": "DayNumber",
       "valueTransform": "minimumTwoDigitNumber",
-      "replaces": "{{DayNumberPadded}}"
+      "replaces": "{{DayNumberPadded}}",
+      "fileRename": "{{DayNumberPadded}}"
     },
     "Name": {
       "type": "parameter",
@@ -35,7 +37,8 @@
       "type": "derived",
       "valueSource": "Name",
       "valueTransform": "noSpaces",
-      "replaces": "{{NamePascalCase}}"
+      "replaces": "{{NamePascalCase}}",
+      "fileRename": "{{NamePascalCase}}"
     }
   },
 

@@ -21,8 +21,6 @@ public class {{NamePascalCase}} : BaseDayModule
 
     public long ExecutePart1(string data)
     {
-        WriteLine($"Part 1 - Loaded Data");
-
         var solution = 0;
         WriteLine($"Solution: {solution}");
         return solution;
@@ -30,8 +28,6 @@ public class {{NamePascalCase}} : BaseDayModule
     
     public long ExecutePart2(string data)
     {
-        WriteLine($"Part 2 - Loaded Data");
-
         var solution = 0;
         WriteLine($"Solution: {solution}");
         return solution;
