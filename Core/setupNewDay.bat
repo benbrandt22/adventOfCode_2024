@@ -14,5 +14,8 @@ set /P Name=Challenge Name:
 :: Run the dotnet command using the user-supplied values
 dotnet new bb.aoc.day --DayNumber %DayNumber% --Name "%Name%"
 
+:: add new files to git
+git add .
+
 :: pause at the end so that the user can see the output
 pause
