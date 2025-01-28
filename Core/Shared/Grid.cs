@@ -1,4 +1,7 @@
-﻿namespace Core.Shared;
+﻿using System.Text;
+using Core.Shared.Extensions;
+
+namespace Core.Shared;
 
 /// <summary>
 /// A basic grid structure based on a 2D array of rows & columns, with the 0,0 origin in the top left corner
@@ -41,7 +44,6 @@ public class Grid<T>
             }
         }
     }
-    
 }
 
 public record GridCoordinate(int Row, int Column)
@@ -74,4 +76,22 @@ public record GridDirection(int DRow, int DCol, GridDirection.DirectionName Name
         Up, Down, Left, Right,
         UpLeft, UpRight, DownLeft, DownRight
     }
+}
+
+public static class GridExtensions
+{
+    public static string Visualize<T>(this Grid<T> grid, Func<T, string> visualizer)
+    {
+        var lines = new List<string>();
+        for (int row = 0; row < grid.RowCount; row++)
+        {
+            var line = Enumerable.Range(0, grid.ColumnCount)
+                .Select(i => visualizer(grid[row, i]))
+                .JoinWith("");
+            lines.Add(line);
+        }
+        return string.Join(Environment.NewLine, lines);
+    }
+
+    public static string Visualize(this Grid<char> grid) => grid.Visualize(c => c.ToString());
 }
