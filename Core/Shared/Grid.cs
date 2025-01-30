@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 using Core.Shared.Extensions;
 
 namespace Core.Shared;
@@ -46,6 +47,7 @@ public class Grid<T>
     }
 }
 
+[DebuggerDisplay("(r{Row}, c{Column})")]
 public record GridCoordinate(int Row, int Column)
 {
     public GridCoordinate Move(GridDirection direction, int distance = 1) =>
