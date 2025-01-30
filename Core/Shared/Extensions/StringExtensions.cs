@@ -50,9 +50,9 @@ public static class StringExtensions
     /// <summary>
     /// Converts a string to a 2D array of integers, where each line is a row and each character is a column.
     /// </summary>
-    public static int[,] ToIntegerGrid(this string input)
+    public static int[,] ToIntegerGrid(this string input, bool removeEmptyLines = false)
     {
-        var lines = input.ToLines();
+        var lines = input.ToLines(removeEmptyLines);
         var grid = new int[lines.Count, lines[0].Length];
         for (var row = 0; row < lines.Count; row++)
         {
